@@ -16,6 +16,7 @@ This a React application that incorporates various components for handling quest
 - [Questions Data](#questions-data)
 - [Styling](#styling)
 - [Getting Started](#getting-started)
+- [Features and Enhancements](#features-and-enhancements)
 
 ## Introduction
 
