@@ -1,23 +1,23 @@
-// PrintButton.jsx
+import React from 'react';
 import html2pdf from 'html2pdf.js';
 
-function PrintButton() {
+function PrintButton({ contentRef }) {
   const handlePrint = () => {
-    // Hide the buttons
-    const buttonsContainer = document.querySelector('.buttons');
-    buttonsContainer.classList.add('print-hide');
+    const content = contentRef.current;
+    const buttonsContainer = content.querySelector('.buttons');
+    if (buttonsContainer) {
+        buttonsContainer.classList.add('print-hide');
+    }
 
-    const content = document.querySelector('.app');
     const opt = {
       margin: 10,
       filename: 'SecurityReport.pdf',
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 2 },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
     };
 
     html2pdf().from(content).set(opt).save().then(() => {
-      // Show the buttons again after saving the PDF
       buttonsContainer.classList.remove('print-hide');
     });
   };

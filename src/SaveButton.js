@@ -1,9 +1,14 @@
-// SaveButton.jsx
+import React from 'react';
 import { saveAs } from 'file-saver';
 
-function SaveButton({ data, image }) {
+function SaveButton({ answers, image, setAnswers, setImage }) {
   const handleSave = () => {
-    const blob = new Blob([JSON.stringify({ ...data, image }, null, 2)], { type: 'application/json' });
+    const dataToSave = { ...answers };
+    if (image) {
+      dataToSave.image = image;
+    }
+
+    const blob = new Blob([JSON.stringify(dataToSave, null, 2)], { type: 'application/json' });
     saveAs(blob, 'data.json');
   };
 

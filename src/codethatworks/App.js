@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react'; // Add 'useRef' import
 import './App.css';
 import Modal from './Modal';
 import SaveButton from './SaveButton';
@@ -14,48 +14,48 @@ function App() {
   const [image, setImage] = useState(null);
   const [currentModalQuestionIndex, setCurrentModalQuestionIndex] = useState(null);
 
+  const formattedAnswersRef = useRef(null); // Create a ref for the formatted answers container
+
   const openModal = (index) => {
-    setCurrentModalQuestionIndex(index); // Update modal question index
+    setCurrentModalQuestionIndex(index);
   };
 
   const closeModal = () => {
     setCurrentModalQuestionIndex(null);
   };
 
-  const saveAnswer = (editorContent) => {
-    if (currentModalQuestionIndex !== null) {
-      setAnswers((prev) => ({
-        ...prev,
-        [currentModalQuestionIndex]: editorContent,
-      }));
-      closeModal();
-    }
-  };
-
   return (
     <div className="app">
       {image && <img src={image} alt="Uploaded" className="uploaded-image" />}
-      <div className="formatted-answers">
+      <div className="formatted-answers" ref={formattedAnswersRef}> {/* Attach the ref to the container */}
         {questions.map((question, index) => (
           <FormattedAnswer
             key={index}
             question={question}
-            content={answers[index]} // Pass answer content to FormattedAnswer
+            content={answers[index]}
             onClick={() => openModal(index)}
           />
         ))}
       </div>
       <div className="buttons">
-        <SaveButton data={answers} image={image} />
-        <LoadButton setData={setAnswers} setImage={setImage} />
-        <PrintButton />
+        <SaveButton answers={answers} image={image} setAnswers={setAnswers} setImage={setImage} />
+        <LoadButton setAnswers={setAnswers} setImage={setImage} />
+        <PrintButton contentRef={formattedAnswersRef} />
         <ImageUpload setImage={setImage} />
       </div>
       <Modal
         isOpen={currentModalQuestionIndex !== null}
         onClose={closeModal}
-        onSave={saveAnswer}
-        initialAnswer={answers[currentModalQuestionIndex] || ''} // Initialize with empty string
+        onSave={(editorContent) => {
+          if (currentModalQuestionIndex !== null) {
+            setAnswers((prev) => ({
+              ...prev,
+              [currentModalQuestionIndex]: editorContent,
+            }));
+            closeModal();
+          }
+        }}
+        initialAnswer={answers[currentModalQuestionIndex] || ''}
       >
         <h2>{questions[currentModalQuestionIndex]?.header}</h2>
         <p>{questions[currentModalQuestionIndex]?.detail}</p>

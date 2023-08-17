@@ -3,25 +3,19 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './Modal.css';
 
-function Modal({ isOpen, onClose, onSave, children, initialAnswer }) {
-  const [editorContent, setEditorContent] = useState('');
+function Modal({ isOpen, onClose, onSave, children, initialAnswer, questionType, setImage }) {
+  const [editorContent, setEditorContent] = useState(initialAnswer || '');
 
   useEffect(() => {
-    // Update editor content when initialAnswer changes
     setEditorContent(initialAnswer || '');
-
-    // Clear editor content when the modal opens with no initial answer
-    if (isOpen && !initialAnswer) {
-      setEditorContent('');
-    }
-  }, [isOpen, initialAnswer]);
-
-  if (!isOpen) return null;
+  }, [initialAnswer]);
 
   const handleSave = () => {
     onSave(editorContent);
     onClose();
   };
+
+  if (!isOpen) return null;
 
   return (
     <div className="modal-overlay">

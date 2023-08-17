@@ -11,8 +11,8 @@
 
 /* Additional styles to make the editor look more like a textarea */
 .ql-editor {
-  min-height: 100px;
-  max-height: 300px;
+  min-height: 300px;
+  height: auto;
   overflow-y: auto;
   border: none;
   padding: 0;
