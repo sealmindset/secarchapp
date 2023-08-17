@@ -1,0 +1,19 @@
+/* FormattedAnswer.css */
+
+.formatted-answer {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  margin-top: 5px;
+  background-color: #f4f4f4;
+  cursor: pointer;
+}
+
+/* Additional styles to make the editor look more like a textarea */
+.ql-editor {
+  min-height: 100px;
+  max-height: 300px;
+  overflow-y: auto;
+  border: none;
+  padding: 0;
+}

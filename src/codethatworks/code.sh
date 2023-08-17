@@ -34,8 +34,15 @@ function increment_version {
     done
 }
 
-# Read file paths from file_list
-files_to_process=$(cat "$file_list")
+# Function to copy files to current folder
+function copy_files_to_current_folder {
+    for file in $files_to_process; do
+        if [ -f "$file" ]; then
+            echo "Copying $file to current folder"
+            cp "$file" .
+        fi
+    done
+}
 
 # Create or append to the versioned output file
 function create_or_append_output_file {
@@ -52,9 +59,16 @@ function create_or_append_output_file {
     done
 }
 
+# Read file paths from file_list
+files_to_process=$(cat "$file_list")
+
+echo "Read the file ${files_to_process}"
+
+# MAIN
+copy_files_to_current_folder
 increment_version
 create_or_append_output_file
 
 echo "The ${output_filename} has been versioned as ${versioned_output_filename}"
 echo "The entire content of ${versioned_output_filename} is copied into the clipboard"
-cat "${versioned_output_filename}" | pbcopy
+pbcopy < $versioned_output_filename

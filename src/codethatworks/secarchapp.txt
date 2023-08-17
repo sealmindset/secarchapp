@@ -5,121 +5,61 @@ import SaveButton from './SaveButton';
 import LoadButton from './LoadButton';
 import PrintButton from './PrintButton';
 import ImageUpload from './ImageUpload';
+import questions from './questions';
+import FormattedAnswer from './FormattedAnswer';
+import 'react-quill/dist/quill.snow.css';
 
 function App() {
-  const questions = [
-    {
-      header: "Diagram",
-      detail: "Add a diagram",
-      type: "image"
-    },
-    {
-      header: "Project/Task Name",
-      detail: "What is the name or title of the project or task you worked on this week?"
-    },
-    {
-      header: "Objective",
-      detail: "What was the primary goal or objective of this project/task?"
-    },
-    {
-      header: "Proposed Architecture Details",
-      detail: "Can you provide a brief overview of the proposed architecture?"
-    },
-    {
-      header: "Data Classification",
-      detail: "What are the data topics and their respective classifications that the project will handle?"
-    },
-    {
-      header: "Threat Analysis",
-      detail: "Based on the proposed architecture and data classification, what potential threats have you identified?"
-    },
-    {
-      header: "Security Specifications",
-      detail: "What specific safeguards or security measures have you recommended to mitigate the identified threats?"
-    },
-    {
-      header: "Gap Analysis",
-      detail: "Were there any gaps between the proposed security specifications and existing security controls? If so, what alternatives did you suggest?"
-    },
-    {
-      header: "Security Exceptions",
-      detail: "Did you have to submit any information security policy & standards exceptions this week? If so, what were the reasons?"
-    },
-    {
-      header: "Penetration Tests & Assessments",
-      detail: "Were any penetration tests or security assessments conducted? What were the outcomes?"
-    },
-    {
-      header: "Collaborations",
-      detail: "Did you collaborate with any Solution Architects, DevOps Teams, or other stakeholders? If so, what was the nature of the collaboration?"
-    },
-    {
-      header: "Impact",
-      detail: "How does your security review align with the company's goals or objectives? What potential impact does it have on ensuring a safe and consistent customer experience?"
-    },
-    {
-      header: "Next Steps",
-      detail: "What are the upcoming tasks or milestones related to this project/initiative?"
-    }
-  ];
-
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(null);
-  const [currentAnswer, setCurrentAnswer] = useState("");
   const [answers, setAnswers] = useState({});
-  const [image, setImage] = useState(null); // Using 'image' instead of 'uploadedImage'
+  const [image, setImage] = useState(null);
+  const [currentModalQuestionIndex, setCurrentModalQuestionIndex] = useState(null);
 
   const openModal = (index) => {
-    setCurrentQuestionIndex(index);
-    setCurrentAnswer(answers[index] || "");
+    setCurrentModalQuestionIndex(index); // Update modal question index
   };
 
   const closeModal = () => {
-    setCurrentQuestionIndex(null);
-    setCurrentAnswer("");
+    setCurrentModalQuestionIndex(null);
   };
 
-  const saveAnswer = () => {
-    setAnswers(prev => ({
-      ...prev,
-      [currentQuestionIndex]: currentAnswer
-    }));
-    closeModal();
+  const saveAnswer = (editorContent) => {
+    if (currentModalQuestionIndex !== null) {
+      setAnswers((prev) => ({
+        ...prev,
+        [currentModalQuestionIndex]: editorContent,
+      }));
+      closeModal();
+    }
   };
 
   return (
     <div className="app">
       {image && <img src={image} alt="Uploaded" className="uploaded-image" />}
-      {questions.map((question, index) => (
-        <div key={index} className="question">
-          <label>{question.header}:</label>
-          <textarea 
-            readOnly 
-            value={answers[index] || ""} 
+      <div className="formatted-answers">
+        {questions.map((question, index) => (
+          <FormattedAnswer
+            key={index}
+            question={question}
+            content={answers[index]} // Pass answer content to FormattedAnswer
             onClick={() => openModal(index)}
-            className="answer-textarea"
           />
-        </div>
-      ))}
-      <Modal
-        isOpen={currentQuestionIndex !== null}
-        onClose={closeModal}
-        onSave={saveAnswer}
-      >
-        {/* Content for the Modal */}
-        <h2>{questions[currentQuestionIndex]?.header}</h2>
-        <p>{questions[currentQuestionIndex]?.detail}</p>
-        <textarea 
-          value={currentAnswer}
-          onChange={(e) => setCurrentAnswer(e.target.value)}
-          className="modal-textarea"
-        />
-      </Modal>
+        ))}
+      </div>
       <div className="buttons">
         <SaveButton data={answers} image={image} />
         <LoadButton setData={setAnswers} setImage={setImage} />
         <PrintButton />
         <ImageUpload setImage={setImage} />
       </div>
+      <Modal
+        isOpen={currentModalQuestionIndex !== null}
+        onClose={closeModal}
+        onSave={saveAnswer}
+        initialAnswer={answers[currentModalQuestionIndex] || ''} // Initialize with empty string
+      >
+        <h2>{questions[currentModalQuestionIndex]?.header}</h2>
+        <p>{questions[currentModalQuestionIndex]?.detail}</p>
+      </Modal>
     </div>
   );
 }
@@ -148,7 +88,6 @@ body {
     display: flex;
     gap: 10px;
 }
-
 
 /* Question Component Styles */
 .question {
@@ -284,18 +223,44 @@ function SaveButton({ data, image }) {
 
 export default SaveButton;
 
+import React, { useState, useEffect } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import './Modal.css';
-// Modal.jsx
-function Modal({ isOpen, onClose, onSave, children }) {
+
+function Modal({ isOpen, onClose, onSave, children, initialAnswer }) {
+  const [editorContent, setEditorContent] = useState('');
+
+  useEffect(() => {
+    // Update editor content when initialAnswer changes
+    setEditorContent(initialAnswer || '');
+
+    // Clear editor content when the modal opens with no initial answer
+    if (isOpen && !initialAnswer) {
+      setEditorContent('');
+    }
+  }, [isOpen, initialAnswer]);
+
   if (!isOpen) return null;
+
+  const handleSave = () => {
+    onSave(editorContent);
+    onClose();
+  };
 
   return (
     <div className="modal-overlay">
       <div className="modal-content">
         {children}
+        <p>Answer:</p>
+        <ReactQuill
+          value={editorContent}
+          onChange={setEditorContent}
+          className="modal-quill-editor"
+        />
         <div className="modal-actions">
           <button onClick={onClose}>Cancel</button>
-          <button onClick={onSave}>OK</button>
+          <button onClick={handleSave}>OK</button>
         </div>
       </div>
     </div>
@@ -303,7 +268,6 @@ function Modal({ isOpen, onClose, onSave, children }) {
 }
 
 export default Modal;
-
 
 .modal-overlay {
   position: fixed;
@@ -361,7 +325,13 @@ export default Modal;
   margin-left: 10px;
 }
 
-
+/* Add styling for the rich text editor */
+.modal-quill-editor {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin: 10px 0;
+  height: 200px;
+}
 
 // PrintButton.jsx
 import html2pdf from 'html2pdf.js';
@@ -392,14 +362,121 @@ function PrintButton() {
 
 export default PrintButton;
 
-function Question({ name, value, onChange, label }) {
+// Question.js
+import React from 'react';
+
+function Question({ index, question, answer, onClick }) {
   return (
     <div className="question">
-      <label htmlFor={name}>{label}</label>
-      <input type="text" id={name} name={name} value={value} onChange={onChange} />
+      <label>{question.header}:</label>
+      <textarea
+        readOnly
+        value={answer}
+        onClick={() => onClick(index)}
+        className="answer-textarea"
+      />
     </div>
   );
 }
 
 export default Question;
+
+  const questions = [
+    {
+      header: "Diagram",
+      detail: "Add a diagram",
+      type: "image"
+    },
+    {
+      header: "Project/Task Name",
+      detail: "What is the name or title of the project or task you worked on this week?"
+    },
+    {
+      header: "Objective",
+      detail: "What was the primary goal or objective of this project/task?"
+    },
+    {
+      header: "Proposed Architecture Details",
+      detail: "Can you provide a brief overview of the proposed architecture?"
+    },
+    {
+      header: "Data Classification",
+      detail: "What are the data topics and their respective classifications that the project will handle?"
+    },
+    {
+      header: "Threat Analysis",
+      detail: "Based on the proposed architecture and data classification, what potential threats have you identified?"
+    },
+    {
+      header: "Security Specifications",
+      detail: "What specific safeguards or security measures have you recommended to mitigate the identified threats?"
+    },
+    {
+      header: "Gap Analysis",
+      detail: "Were there any gaps between the proposed security specifications and existing security controls? If so, what alternatives did you suggest?"
+    },
+    {
+      header: "Security Exceptions",
+      detail: "Did you have to submit any information security policy & standards exceptions this week? If so, what were the reasons?"
+    },
+    {
+      header: "Penetration Tests & Assessments",
+      detail: "Were any penetration tests or security assessments conducted? What were the outcomes?"
+    },
+    {
+      header: "Collaborations",
+      detail: "Did you collaborate with any Solution Architects, DevOps Teams, or other stakeholders? If so, what was the nature of the collaboration?"
+    },
+    {
+      header: "Impact",
+      detail: "How does your security review align with the company's goals or objectives? What potential impact does it have on ensuring a safe and consistent customer experience?"
+    },
+    {
+      header: "Next Steps",
+      detail: "What are the upcoming tasks or milestones related to this project/initiative?"
+    }
+  ];
+
+  export default questions;
+import React from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import './FormattedAnswer.css';
+
+function FormattedAnswer({ question, content, onClick }) {
+  return (
+    <div className="formatted-answer" onClick={() => onClick()}>
+      <h3>{question.header}</h3>
+      <div className="modal-quill-editor">
+        <ReactQuill
+          value={content || ''} // Use content as the initial value
+          readOnly={true}
+          theme={null}
+        />
+      </div>
+    </div>
+  );
+}
+
+export default FormattedAnswer;
+
+/* FormattedAnswer.css */
+
+.formatted-answer {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  margin-top: 5px;
+  background-color: #f4f4f4;
+  cursor: pointer;
+}
+
+/* Additional styles to make the editor look more like a textarea */
+.ql-editor {
+  min-height: 100px;
+  max-height: 300px;
+  overflow-y: auto;
+  border: none;
+  padding: 0;
+}
 
