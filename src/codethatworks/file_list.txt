@@ -6,7 +6,8 @@
 /Users/robvance/Documents/GitHub/secarchapp/src/Modal.js
 /Users/robvance/Documents/GitHub/secarchapp/src/Modal.css
 /Users/robvance/Documents/GitHub/secarchapp/src/PrintButton.js
-/Users/robvance/Documents/GitHub/secarchapp/src/Question.js
 /Users/robvance/Documents/GitHub/secarchapp/src/questions.js
 /Users/robvance/Documents/GitHub/secarchapp/src/FormattedAnswer.js
 /Users/robvance/Documents/GitHub/secarchapp/src/FormattedAnswer.css
+/Users/robvance/Documents/GitHub/secarchapp/src/ChatGPTPopup.js
+/Users/robvance/Documents/GitHub/secarchapp/src/ChatGPTPopup.css

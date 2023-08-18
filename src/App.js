@@ -7,12 +7,14 @@ import PrintButton from './PrintButton';
 import questions from './questions';
 import FormattedAnswer from './FormattedAnswer';
 import 'react-quill/dist/quill.snow.css';
+import ChatGPTPopup from './ChatGPTPopup'; // Import the ChatGPTPopup component
+import './ChatGPTPopup.css'
 
 function App() {
   const [answers, setAnswers] = useState({});
   const [image, setImage] = useState(null);
   const [currentModalQuestionIndex, setCurrentModalQuestionIndex] = useState(null);
-
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const formattedAnswersRef = useRef(null); // Create a ref for the formatted answers container
 
   const openModal = (index) => {
@@ -67,6 +69,8 @@ function App() {
         <SaveButton answers={answers} image={image} setAnswers={setAnswers} setImage={setImage} />
         <LoadButton setAnswers={setAnswers} setImage={setImage} />
         <PrintButton contentRef={formattedAnswersRef} />
+        <button onClick={() => setIsChatOpen(true)}>Chat with ChatGPT</button> {/* Button to trigger the ChatGPT popup */}
+        <ChatGPTPopup isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} /> {/* ChatGPT popup component */}
         <button className="reset-all" onClick={resetAll}>Reset All</button>
       </div>
       <Modal

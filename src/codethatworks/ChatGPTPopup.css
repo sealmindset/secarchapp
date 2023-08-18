@@ -1,0 +1,90 @@
+/* ChatGPTPopup.css */
+
+.chat-popup {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  width: 500px;
+  max-height: 800px;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  background-color: #f5f5f5;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.message {
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.message.user {
+  background-color: #e6f7ff;
+  align-self: flex-end;
+}
+
+.message.chatgpt {
+  background-color: #f5f5f5;
+}
+
+.chat-input {
+  padding: 10px;
+  border-top: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.chat-input button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.chat-input button:hover {
+  background-color: #0056b3;
+}
+
+.message {
+  position: relative;  /* Set the message div to relative positioning */
+}
+
+.copy-button {
+  position: absolute;  /* Absolute positioning for the button */
+  top: 0;              /* Align to the top of the message div */
+  right: 0;            /* Align to the right of the message div */
+  font-size: 6px;      /* Set font size to 6px */
+  background-color: transparent;  /* Transparent background */
+  border: none;        /* Remove border */
+  cursor: pointer;     /* Cursor style for button */
+  padding: 2px;        /* Some padding for better appearance */
+}

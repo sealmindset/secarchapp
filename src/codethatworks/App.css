@@ -77,6 +77,11 @@ button + button {
     color: #fff;
 }
 
+button.reset-all {
+    background-color: #FF4136;
+    color: #fff;
+}
+
 .print-hide {
     display: none !important;
 }

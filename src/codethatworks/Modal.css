@@ -1,0 +1,39 @@
+/* Modal Overlay Styles */
+.modal-overlay {
+    position: fixed; /* Fixed positioning */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* High z-index to ensure it's above other content */
+}
+
+/* Modal Content Styles */
+.modal-content {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 80%; /* or whatever maximum width you prefer */
+    max-height: 80%; /* to ensure the modal doesn't take up the entire screen height */
+    overflow-y: auto; /* to allow scrolling if the content is too tall */
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2); /* Optional: Adds a subtle shadow for a more "elevated" look */
+}
+
+/* Modal Actions (Buttons) Styles */
+.modal-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px; /* Space between buttons */
+}
+
+/* Modal Quill Editor Styles */
+.modal-quill-editor {
+    margin-top: 10px;
+}
+
+/* You can add more specific styles or adjust the above as needed to fit your design preferences. */

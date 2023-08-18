@@ -3,14 +3,12 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './Modal.css';
 
-function Modal({ isOpen, onClose, onSave, children, initialAnswer }) {
+function Modal({ isOpen, onClose, onSave, children, initialAnswer, questionType, setImage }) {
   const [editorContent, setEditorContent] = useState(initialAnswer || '');
 
   useEffect(() => {
-    if (!isOpen && !initialAnswer) {
-      setEditorContent('');
-    }
-  }, [isOpen, initialAnswer]);
+    setEditorContent(initialAnswer || '');
+  }, [initialAnswer]);
 
   const handleSave = () => {
     onSave(editorContent);

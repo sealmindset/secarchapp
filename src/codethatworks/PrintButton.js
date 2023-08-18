@@ -1,11 +1,13 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import html2pdf from 'html2pdf.js';
 
 function PrintButton({ contentRef }) {
   const handlePrint = () => {
     const content = contentRef.current;
     const buttonsContainer = content.querySelector('.buttons');
-    buttonsContainer.classList.add('print-hide');
+    if (buttonsContainer) {
+        buttonsContainer.classList.add('print-hide');
+    }
 
     const opt = {
       margin: 10,

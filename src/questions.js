@@ -22,7 +22,12 @@
     },
     {
       header: "Threat Analysis",
-      detail: "Based on the proposed architecture and data classification, what potential threats have you identified?"
+      detail: "What are the various threats, the tactics, techniques and procedures (TTP) and hacker would use, its impact if the threat is successfully exploited, and steps that need to be taken to mitigate when using a single API Gateway for both internal and external; use the following format: \
+      Title of Threat: \
+      Description of Threat: \
+      Tactics, Techniques and Procedures: \
+      Impact: \
+      Mitigation:"
     },
     {
       header: "Security Specifications",
